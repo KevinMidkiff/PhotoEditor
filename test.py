@@ -13,6 +13,7 @@ def main():
     """
     Main Function
     """
+    # img_name = 'space-wallpapers-11.jpg'
     img_name = 'opencv_orig_filter.jpg'
     img1 = PEImg(img_name)
     img2 = PEImg(img_name)
@@ -32,13 +33,31 @@ def main():
     # plt.xticks([]), plt.yticks([])
     # plt.show()
     root = Tk.Tk()
-    pil_image = Image.fromarray(img2.image)
+    pil_image = Image.fromarray(img2.origonal)
+    pil_image.thumbnail((750, 750), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image=pil_image)
     label = Tk.Label(root, image=photo)
+    label.place(x=0, y=0, width=750, height=750)
     label.image = photo
     label.grid()
+    # canvas = Tk.Canvas(root, width=750, height=750)
+    # canvas.pack()
+    # imagesprite = canvas.create_image(400, 400, image=image)
+    root.mainloop()
+
+
+def test_main():
+    root = Tk.Tk()
+    root.geometry('750x750')
+    canvas = Tk.Canvas(root, width=750, height=750)
+    canvas.pack()
+    pilImage = Image.open('space-wallpapers-11.jpg')
+    pilImage.thumbnail((750, 750), Image.ANTIALIAS)
+    image = ImageTk.PhotoImage(pilImage)
+    imagesprite = canvas.create_image(400, 400, image=image)
     root.mainloop()
 
 if __name__ == '__main__':
     # main()  
     gui.main()
+    # test_main()

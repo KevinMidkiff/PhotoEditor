@@ -7,9 +7,10 @@ from photo_editor.image import Image
 def main():
     master = Tk()
 
-    master.geometry('{}x{}'.format(750, 500))
+    master.geometry('{}x{}'.format(850, 500))
 
-    img = Image('C:\\_Data\\Pictures\\christmas_present_pictures\\MidkiffP.jpg')
+    # img = Image('opencv_orig_filter.jpg')
+    img = Image('space-wallpapers-11.jpg')
 
     # init actions pane
     actions_pane = PanedWindow(master)
@@ -42,12 +43,18 @@ def main():
 
     # Loading image
     pil_image = PIL.Image.fromarray(img.image)
+    pil_image.thumbnail((650, 500), PIL.Image.ANTIALIAS)
+
     photo = PIL.ImageTk.PhotoImage(image=pil_image)
 
     cont_lbl = Label(content_pane, image=photo)  # text='Content Pane')
+    cont_lbl.place(x=0, y=0, width=750, height=750)
+    cont_lbl.image = photo
+    cont_lbl.grid()
+
     content_pane.add(cont_lbl)
 
-    mainloop()
+    master.mainloop()
 
 
 if __name__ == '__main__':
