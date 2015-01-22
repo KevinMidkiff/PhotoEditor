@@ -27,6 +27,9 @@ class Image(object):
         self._img = cv2.imread(filename)
         self._orig_img = self._img
         self._prev_img = self._img
+        self.cvt_flag = cv2.COLOR_BGR2RGBA
+        self.show_normal = False
+        self.prev_show_normal = False
 
     @property
     def origonal(self):
@@ -40,19 +43,24 @@ class Image(object):
         """
         The current image
         """
-        return self._img
+        if self.show_normal:
+            return self._img
+        else:
+            return cv2.cvtColor(self._img, self.cvt_flag)
 
     def reset(self):
         """
         Reset back to the origonal image
         """
         self._img = self.origonal
+        self.show_normal = False
 
     def undo(self):
         """
         Undo the last filter
         """
         self._img = self._prev_img
+        self.show_normal = self.prev_show_normal
 
     def save(self, filename, overwrite=False):
         """
@@ -80,4 +88,16 @@ class Image(object):
             img_filter - A filter of type BaseFilter
         """
         self._prev_img = self._img
-        self._img = img_filter.filter(self._img)
+        self.prev_show_normal = self.show_normal
+
+        try:
+            self.show_normal = img_filter.show_normal
+            self._img = img_filter.filter(self._orig_img)
+
+            if img_filter.set_to_origonal:
+                self.reset()
+        except AssertionError:
+            if img_filter.set_to_origonal:
+                self.reset()
+            else:
+                self.undo()
